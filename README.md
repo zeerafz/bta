@@ -23,6 +23,7 @@ The toolbar also has buttons for mouse and touch navigation. When a button has f
 
 ## Live demos
 
+- **26 · Approximate nearest neighbor walkthrough.** Step from the cooking query through cell selection, distance comparisons, and the five returned candidates. Check exact reveals the nearby video the two-cell search missed.
 - **27 · Approximate nearest neighbor search.** Pick a topic and compare approximate and exact search. Cooking shows how scanning only part of the index can miss a nearby match. Both modes use the same 304 synthetic points.
 - **29 · Learning from interactions.** Finish or skip a video to see an interest score change. Reset restores the starting scores.
 - **31 · Ranking.** Switch priority between completion and sharing to see the same candidates reorder.
@@ -39,7 +40,7 @@ Speaker notes are hidden in the presentation by default and available in the pub
 - `index.html` and `presenter.html` open the presentation and the separate notes window.
 - `css/main.css` controls the layout, scaling, and motion.
 - `js/slides-data.js` contains the slide titles and notes.
-- `js/diagrams.js` contains the SVG artwork. `js/demos.js` implements the three interactive demos.
+- `js/diagrams.js` contains the SVG artwork. `js/demos.js` implements the interactive demos.
 - `js/app.js` and `js/presenter.js` handle navigation and keep the windows in sync.
 - `js/review.js` contains the quizzes and references.
 - `assets/images/` contains the three ImageGen illustrations. [Cover](assets/images/cover.webp) · [Ring ad](assets/images/conversation.webp) · [Closing illustration](assets/images/reflection.webp)

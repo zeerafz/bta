@@ -75,20 +75,6 @@
       label(title, 1041, 155 + 51 * i, { cls: "small", align: "start", color: muted })).join(""),
   "Synthetic video embeddings grouped by similarity");
 
-  visual.approximation = () => {
-    const query = { x: 451, y: 192 };
-    const { visited, neighbors, compared } = findNeighbors(query, false);
-    return plotCanvas(visited.map((cell) => box(cell.x - cellWidth / 2, cell.y - cellHeight / 2, cellWidth, cellHeight,
-      "#66e7f224", cyan, 0)).join("") + field() +
-      neighbors.map(({x,y}) => circle(x, y, 8, "none", "#fff", 'stroke-width="1.6"')).join("") +
-      circle(query.x, query.y, 7, cyan, "#fff", 'stroke-width="1.6"'),
-    label("Search two cells", 1107, 101, { cls: "big", color: cyan }) +
-    label(String(compared.length), 1107, 192, { cls: "display" }) +
-    label("comparisons in this example", 1107, 233, { cls: "small", color: muted }) +
-    label(`out of ${points.length} points`, 1107, 291, { cls: "small", color: muted }),
-    "Approximate search compares points in two index cells");
-  };
-
   const button = (action, text, pressed) =>
     `<button type="button" class="demo-button" data-action="${action}"${pressed === undefined ? "" : ` aria-pressed="${pressed}"`}>${text}</button>`;
 
@@ -109,6 +95,87 @@
   const queryLocations = [
     { x: 245, y: 121 }, { x: 388, y: 237 }, { x: 653, y: 126 }, { x: 801, y: 241 }
   ];
+
+  const searchSteps = ["Query", "Pick cells", "Compare points", "Return five", "Check exact"];
+
+  function renderSearchWalkthrough() {
+    const chart = plotCanvas('<g class="walk-cells"></g>' +
+      `<g class="walk-field">${field()}</g><g class="walk-marks"></g>` +
+      '<g class="walk-query"></g>',
+    '<g class="walk-explanation"></g>', "Step-by-step grid search on a map of video embeddings");
+    return interactive(chart,
+      `<div role="group" aria-label="Search steps">${searchSteps.map((step, index) =>
+        button(`step-${index}`, `${index + 1}. ${step}`, index === 0)
+      ).join("")}</div>`);
+  }
+
+  function initSearchWalkthrough(root) {
+    // The cooking query has an exact neighbor just outside the selected cells.
+    const query = queryLocations[1];
+    const { visited, compared, neighbors } = findNeighbors(query, false);
+    const exact = findNeighbors(query, true).neighbors;
+    const missed = exact.filter((point) => !neighbors.includes(point));
+    const extra = neighbors.filter((point) => !exact.includes(point));
+    const shared = neighbors.filter((point) => exact.includes(point));
+    const selected = root.querySelector(".walk-cells");
+    const fieldLayer = root.querySelector(".walk-field");
+    const marks = root.querySelector(".walk-marks");
+    const explanation = root.querySelector(".walk-explanation");
+    const amber = swatches[1];
+    const centerLines = visited.map(({ x, y }, index) =>
+      path(`M${query.x} ${query.y}L${x} ${y}`, cyan, 1.8, 'stroke-dasharray="5 6"') +
+      circle(x, y, 13, "#152e37", cyan) +
+      label(String(index + 1), x, y + 5, { cls: "tiny", color: cyan })
+    ).join("");
+    const distanceLines = compared.map(({ x, y }) =>
+      path(`M${query.x} ${query.y}L${x} ${y}`, "#66e7f255", 1) +
+      circle(x, y, 4, cyan)
+    ).join("");
+    const candidateRing = ({ x, y }, color = ink, style = "") =>
+      circle(x, y, 9, "none", color, `stroke-width="2.5" ${style}`);
+    const returned = neighbors.map((point) => candidateRing(point)).join("");
+    const exactCheck = shared.map((point) => candidateRing(point)).join("") +
+      extra.map((point) => candidateRing(point, muted, 'stroke-dasharray="3 3"')).join("") +
+      missed.map((point) =>
+        path(`M${point.x + 7} ${point.y + 7}l34 39h28`, amber, 1.8) +
+        label("Missed neighbor", point.x + 75, point.y + 51, { cls: "small", color: amber, align: "start" }) +
+        candidateRing(point, amber)
+      ).join("");
+    const steps = [
+      ["Cooking interest", ["Diamond = search query", "Each dot = one video"],
+        "The diamond marks a viewer’s cooking interest. Each dot represents one video.", ""],
+      ["2 closest centers", ["Measure to cell centers.", "Search the nearest two."],
+        "Choose the two cells whose centers are nearest to the query.", centerLines],
+      [`${compared.length} of ${points.length} points`, ["Measure from the query", "to dots in those cells."],
+        `Compare distances to the ${compared.length} points inside the two selected cells.`, distanceLines],
+      ["5 candidates", ["Return the nearest five", "among the points checked."],
+        "The five white rings show the candidates returned by the approximate search.", returned],
+      [`${shared.length} of 5 match`, [`Exact checks all ${points.length} dots.`, "Amber = missed neighbor", "Dashed = approximate only"],
+        `Exact search compares all ${points.length} points. ${shared.length} results match. The amber ring marks a missed neighbor outside the selected cells. The dashed ring marks the approximate-only candidate.`, exactCheck]
+    ];
+    root.querySelector(".walk-query").innerHTML =
+      `<path d="M0-10L10 0 0 10-10 0z" transform="translate(${query.x} ${query.y})" fill="${cyan}" stroke="#fff" stroke-width="2"/>`;
+
+    function showStep(index) {
+      const [title, lines, description, overlay] = steps[index];
+      selected.innerHTML = index === 0 ? "" : visited.map(({ x, y }) =>
+        box(x - cellWidth / 2, y - cellHeight / 2, cellWidth, cellHeight, "#66e7f224", cyan, 0)
+      ).join("");
+      fieldLayer.setAttribute("opacity", index < 2 ? "1" : ".45");
+      marks.innerHTML = overlay;
+      explanation.innerHTML =
+        label(searchSteps[index], 1107, 85, { cls: "small", color: muted }) +
+        label(title, 1107, 149, { cls: "big", color: index === 4 ? amber : cyan }) +
+        lines.map((text, row) => label(text, 1107, 208 + row * 38, { cls: "small", color: muted })).join("");
+      setPressed(root, "step-", `step-${index}`);
+      announce(root, description);
+    }
+
+    root.querySelectorAll("[data-action^='step-']").forEach((control, index) => {
+      control.addEventListener("click", () => showStep(index));
+    });
+    showStep(0);
+  }
 
   function renderANN() {
     const chart = plotCanvas(`<g class="ann-cells"></g>${field()}${categoryLabels()}<g class="ann-candidates"></g>
@@ -250,9 +317,10 @@
     update("rank-complete");
   }
 
+  visual.approximation = renderSearchWalkthrough;
   visual.ann = renderANN;
   visual.learn = renderLearn;
   visual.ranking = renderRanking;
-  window.DeckDemos = { ann: initANN, learn: initLearn, ranking: initRanking };
+  window.DeckDemos = { approximation: initSearchWalkthrough, ann: initANN, learn: initLearn, ranking: initRanking };
 })();
 
