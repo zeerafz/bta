@@ -34,7 +34,6 @@
   const references = [
     ["App analysis", [
       ["OWASP", "Mobile Security Testing Guide", "https://mas.owasp.org/MASTG/techniques/"],
-      ["OWASP", "Broken object-level authorization", "https://api-security.owasp.org/editions/2023/en/0xa1-broken-object-level-authorization/"],
       ["Android Open Source Project", "Android Runtime and DEX", "https://source.android.com/docs/core/runtime"],
       ["Oracle", "The javac compiler", "https://docs.oracle.com/en/java/javase/25/docs/specs/man/javac.html"],
       ["JADX and Frida", "Decompilation and runtime inspection", "https://github.com/skylot/jadx", "https://frida.re/docs/home/"]

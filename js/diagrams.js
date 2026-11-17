@@ -216,13 +216,6 @@
     ["eye", "Hidden behavior", cyan], ["bug", "Vulnerabilities", red], ["lock", "Data access", "#c5afff"]
   ], "What an app inspection can uncover");
 
-  visual.vulnerability = () => sequence([
-    ["users", "Account A", cyan, "REQUESTS B’S PRIVATE NOTE"],
-    ["bug", "Missing check", red, "SERVER RETURNS THE NOTE"],
-    ["shield", "Server fix", "#c5afff", "CHECK ACCESS TO THE NOTE"]
-  ], "In a test app, account A can read account B’s private note when the server skips its access check.",
-  { captions: ["A vulnerability is a weakness someone can use to break a security rule."] });
-
   visual.layers = () => {
     const rows = [
       [52, cyan, "AndroidManifest.xml", "App declaration and permissions"],
@@ -460,13 +453,6 @@
     lane(65, cyan, "Inference from activity", [["search", "Activity"], ["cpu", "Inference"], ["target", "Ad"]]) +
     lane(277, red, "Evidence of audio use", [["mic", "Mic access"], ["file", "Audio capture"], ["target", "Link to the ad"]]),
   "Two paths show activity-based inference and the evidence required to link audio to an ad");
-
-  visual.micTest = () => sequence([
-    ["sliders", "Vary permission", cyan, "MIC ALLOWED VS DENIED"],
-    ["mic", "Check mic access", "#c5afff", "RECORD WHEN IT HAPPENS"],
-    ["target", "Trace ad selection", red, "LOOK FOR AN AUDIO LINK"]
-  ], "A test plan compares microphone access with permission allowed and denied. Linking audio to a specific ad requires evidence from the ad decision.",
-  { captions: ["Repeat the same app action in both trials. Check the ad decision separately."] });
 
   visual.footprint = () => {
     const random = seeded(14);
