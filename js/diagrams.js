@@ -101,7 +101,7 @@
       (small ? label(small, x + w / 2, y + h * .89, { cls: "tiny mono", color: muted }) : "");
   }
 
-  function sequence(items, accessibleLabel, { w = 1260, h = 440 } = {}) {
+  function sequence(items, accessibleLabel, { w = 1260, h = 440, captions = [] } = {}) {
     const span = (w - 110) / items.length;
     const tileWidth = Math.min(span - 46, 258);
     const ys = h * .25;
@@ -113,7 +113,11 @@
     }).join("");
     const tiles = items.map(([glyph, title, color, small], i) =>
       node(positions[i] - tileWidth / 2, ys, tileWidth, height, glyph, title, color, small)).join("");
-    return canvas(w, h, frame(w, h) + connectors + tiles, accessibleLabel);
+    const explanation = captions.map((text, index) =>
+      label(text, w / 2, h * .86 + (index - (captions.length - 1) / 2) * 32,
+        { cls: "node-title", color: muted })
+    ).join("");
+    return canvas(w, h, frame(w, h) + connectors + tiles + explanation, accessibleLabel);
   }
 
   function codePanel(x, y, w, h, header, rows, accent = cyan) {
@@ -212,6 +216,13 @@
     ["eye", "Hidden behavior", cyan], ["bug", "Vulnerabilities", red], ["lock", "Data access", "#c5afff"]
   ], "What an app inspection can uncover");
 
+  visual.vulnerability = () => sequence([
+    ["users", "Account A", cyan, "REQUESTS B’S PRIVATE NOTE"],
+    ["bug", "Missing check", red, "SERVER RETURNS THE NOTE"],
+    ["shield", "Server fix", "#c5afff", "CHECK ACCESS TO THE NOTE"]
+  ], "In a test app, account A can read account B’s private note when the server skips its access check.",
+  { captions: ["A vulnerability is a weakness someone can use to break a security rule."] });
+
   visual.layers = () => {
     const rows = [
       [52, cyan, "AndroidManifest.xml", "App declaration and permissions"],
@@ -287,14 +298,19 @@
   "Code inspection reveals a possible path and a runtime test captures the request");
 
   visual.api = () => canvas(1260, 440, frame(1260, 440) +
-    phone(92, 67, 170, 307, icon("app", 177, 220, 70, cyan)) +
+    phone(92, 67, 170, 307, icon("play", 177, 207, 65, cyan) +
+      label("AI video", 177, 279, { cls: "small", color: muted })) +
     badge("server", 1080, 219, "Server", red, 78) +
     arrow("M290 166H973", cyan, true, "3.3s") +
     arrow("M973 279H290", red, true, "3.3s", ".7s") +
-    label("POST /events", 630, 136, { cls: "mono", color: cyan }) +
+    label("POST /events", 630, 103, { cls: "mono", color: cyan }) +
+    label("18 s watched · 20 s video", 630, 138, { cls: "small" }) +
     label("HTTP 204", 630, 319, { cls: "mono", color: red }) +
-    badge("lock", 630, 223, "", muted, 31),
-  "Example HTTPS request from a phone and response from a server");
+    badge("lock", 630, 223, "", muted, 31) +
+    path("M53 389H1207", line, 1) +
+    label("Observed: playback event sent", 70, 418, { cls: "small", color: cyan, align: "start" }) +
+    label("Open question: did it change the next recommendation?", 1190, 418, { cls: "small", color: muted, align: "end" }),
+  "The test app sends a playback event. The network trace leaves the event’s effect on recommendations open");
 
   function card(x, y, w, h, title, color) {
     return box(x, y, w, h, color === red ? "url(#heat)" : "url(#screen)", "#47627c", 12) +
@@ -334,8 +350,15 @@
   "A screenshot shows field names. A repeatable test can establish what they do");
 
   visual.prediction = () => sequence([
-    ["play", "Interaction", cyan], ["sliders", "Features", "#a8d1ff"], ["cpu", "Model", "#c5afff"], ["target", "Prediction", red]
-  ], "Interactions become features that a model uses to make predictions");
+    ["play", "Watch an AI clip", cyan, "18 OF 20 SECONDS"],
+    ["sliders", "Compute a feature", "#a8d1ff", "18 ÷ 20 = 90% WATCHED"],
+    ["cpu", "Model", "#c5afff", "COMBINES FEATURES"],
+    ["target", "Prediction", red, "86% CHANCE TO FINISH"]
+  ], "90 percent watched is a feature from the first clip. The model combines features to estimate an 86 percent chance of finishing a different clip, What is a token?",
+  { captions: [
+    "A feature is an input to the model. A prediction estimates what might happen next.",
+    "90% is what you watched. 86% is the estimated chance you’ll finish “What is a token?”"
+  ] });
 
   visual.loop = () => {
     const corners = [[288, 111], [972, 111], [972, 331], [288, 331]];
@@ -391,9 +414,13 @@
   "A sample equation combines completion and sharing probabilities");
 
   visual.pipeline = () => sequence([
-    ["play", "Interaction", cyan], ["sliders", "Features", "#a8d1ff"],
-    ["filter", "Retrieval", "#c5afff"], ["chart", "Ranking", "#ffbc83"], ["phone", "Display", red]
-  ], "Interaction, features, retrieval, ranking, and display");
+    ["play", "Interaction", cyan, "18 OF 20 SECONDS"],
+    ["sliders", "Feature", "#a8d1ff", "90% WATCHED"],
+    ["filter", "Retrieval", "#c5afff", "FIND RELATED CLIPS"],
+    ["chart", "Ranking", "#ffbc83", "SCORE EACH CLIP"],
+    ["phone", "Display", red, "NEXT AI VIDEO"]
+  ], "The AI video example follows a viewing event from feature calculation to display. Retrieval finds a shortlist and ranking puts the candidates in order.",
+  { captions: ["Retrieval finds the shortlist. Ranking puts the candidates in order."] });
 
   visual.rings = () => canvas(1260, 445, frame(1260, 445) +
     phone(97, 69, 205, 306, icon("search", 199, 196, 53, cyan) +
@@ -434,6 +461,13 @@
     lane(277, red, "Evidence of audio use", [["mic", "Mic access"], ["file", "Audio capture"], ["target", "Link to the ad"]]),
   "Two paths show activity-based inference and the evidence required to link audio to an ad");
 
+  visual.micTest = () => sequence([
+    ["sliders", "Vary permission", cyan, "MIC ALLOWED VS DENIED"],
+    ["mic", "Check mic access", "#c5afff", "RECORD WHEN IT HAPPENS"],
+    ["target", "Trace ad selection", red, "LOOK FOR AN AUDIO LINK"]
+  ], "A test plan compares microphone access with permission allowed and denied. Linking audio to a specific ad requires evidence from the ad decision.",
+  { captions: ["Repeat the same app action in both trials. Check the ad decision separately."] });
+
   visual.footprint = () => {
     const random = seeded(14);
     return canvas(850, 550, frame(850, 550) +
@@ -450,28 +484,14 @@
     ["shield", "Update your device", red, "SYSTEM · APPS"]
   ], "Steps to reduce access and tracking");
 
-  function system(local) {
-    if (!local) return sequence([
-      ["phone", "Device", cyan], ["wifi", "Send signals", "#a8d1ff"], ["server", "Server", red], ["target", "Recommendation", "#c5afff"]
-    ], "The device sends signals and receives a recommendation computed on a server");
-    return canvas(1260, 445, frame(1260, 445) +
-      box(163, 56, 934, 338, "#132331", cyan, 22) +
-      label("Inside the device", 205, 102, { align: "start", color: cyan }) +
-      box(610, 70, 40, 5, "#587590", "none", 2) +
-      arrow("M420 230H550", cyan, true) + arrow("M710 230H840", cyan, true) +
-      badge("chart", 352, 230, "Local signals", cyan, 56) +
-      badge("cpu", 630, 230, "Local model", "#c5afff", 56) +
-      badge("target", 908, 230, "Recommendation", red, 56),
-    "The device computes the recommendation locally");
-  }
-
-  visual.cloud = () => system(false);
-  visual.local = () => system(true);
   visual.architecture = () => canvas(1260, 445, frame(1260, 445) +
-    lane(65, red, "Cloud Processing", [["phone","Device"],["server","Remote model"],["target","Recommendation"]]) +
-    lane(276, cyan, "On-Device Processing", [["chart","Local signals"],["cpu","Local model"],["target","Recommendation"]]) +
-    box(52, 277, 1156, 88, "none", `${cyan}b0`, 10),
-  "Cloud processing sends a request to a server. Local processing ranks on the device");
+    lane(67, red, "SERVER RANKING", [["wifi", "Send signals"], ["server", "Server ranks"], ["phone", "Get ranked list"]]) +
+    label("Supports larger models. The service receives the signals used in this example.", 630, 165, { cls: "small", color: muted }) +
+    lane(237, cyan, "ON-DEVICE RANKING", [["chart", "Use local history"], ["cpu", "Phone ranks"], ["phone", "Show videos"]]) +
+    label("History can stay on the phone. Ranking uses the phone’s memory and power.", 630, 335, { cls: "small", color: muted }) +
+    box(38, 370, 1184, 53, "#142030", line, 9) +
+    label("Hybrid example: The server finds candidates. The phone orders them.", 630, 404, { cls: "node-title" }),
+  "Server ranking sends signals to a server, on-device ranking can use a local history, and hybrid ranking can combine server retrieval with local ordering");
 
   visual.thanks = () => canvas(1448, 716, circle(724, 351, 329, "url(#halo)") +
     orbit(724, 351, 272, "#5a7795") + orbit(724, 351, 241, "#5a7795") +

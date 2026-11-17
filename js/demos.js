@@ -93,7 +93,7 @@
   }
 
   const queryLocations = [
-    { x: 245, y: 121 }, { x: 388, y: 237 }, { x: 653, y: 126 }, { x: 801, y: 241 }
+    { x: 210, y: 136 }, { x: 388, y: 237 }, { x: 653, y: 126 }, { x: 801, y: 241 }
   ];
 
   const searchSteps = ["Query", "Pick cells", "Compare points", "Return five", "Check exact"];
@@ -110,8 +110,8 @@
   }
 
   function initSearchWalkthrough(root) {
-    // The cooking query has an exact neighbor just outside the selected cells.
-    const query = queryLocations[1];
+    // The AI query has an exact neighbor just outside the selected cells.
+    const query = queryLocations[0];
     const { visited, compared, neighbors } = findNeighbors(query, false);
     const exact = findNeighbors(query, true).neighbors;
     const missed = exact.filter((point) => !neighbors.includes(point));
@@ -142,8 +142,8 @@
         candidateRing(point, amber)
       ).join("");
     const steps = [
-      ["Cooking interest", ["Diamond = search query", "Each dot = one video"],
-        "The diamond marks a viewer’s cooking interest. Each dot represents one video.", ""],
+      ["Interest in AI", ["Diamond = search query", "Each dot = one video"],
+        "The diamond marks a viewer’s interest in AI. Each dot represents one video.", ""],
       ["2 closest centers", ["Measure to cell centers.", "Search the nearest two."],
         "Choose the two cells whose centers are nearest to the query.", centerLines],
       [`${compared.length} of ${points.length} points`, ["Measure from the query", "to dots in those cells."],
@@ -268,9 +268,9 @@
   }
 
   const rankingItems = [
-    { title: "Quick recipe", p: [.86, .21], color: swatches[1] },
-    { title: "Game highlight", p: [.62, .84], color: swatches[3] },
-    { title: "AI explainer", p: [.74, .42], color: swatches[0] }
+    { title: "What is a token?", p: [.86, .21] },
+    { title: "Why chatbots make mistakes", p: [.62, .84] },
+    { title: "How prompts change replies", p: [.74, .42] }
   ];
 
   function renderRanking() {
@@ -279,9 +279,9 @@
       label("Completion chance", 703, 60, { cls: "small", color: muted }) +
       label("Share chance", 900, 60, { cls: "small", color: muted }) +
       label("Score", 1124, 60, { cls: "small", color: muted });
-    const rows = rankingItems.map(({ title, p, color }, i) =>
+    const rows = rankingItems.map(({ title, p }, i) =>
       `<g class="ranking-row" data-index="${i}">` +
-      box(56, 0, 1148, 62, "#152131", line, 7) + icon("play", 208, 31, 24, color) +
+      box(56, 0, 1148, 62, "#152131", line, 7) + icon("play", 208, 31, 24, swatches[1]) +
       '<text class="mono rank-number" x="136" y="39" text-anchor="middle" fill="#ecf5ff"></text>' +
       label(title, 245, 39, { align: "start" }) +
       label(p[0].toFixed(2), 703, 39, { cls: "mono", color: muted }) +
