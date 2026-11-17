@@ -103,14 +103,14 @@
       `<g class="walk-field">${field()}</g><g class="walk-marks"></g>` +
       '<g class="walk-query"></g>',
     '<g class="walk-explanation"></g>', "Step-by-step grid search on a map of video embeddings");
-    return interactive(chart,
+    return interactive(chart + '<div class="ann-candidate-tray" hidden></div>',
       `<div role="group" aria-label="Search steps">${searchSteps.map((step, index) =>
         button(`step-${index}`, `${index + 1}. ${step}`, index === 0)
       ).join("")}</div>`);
   }
 
   function initSearchWalkthrough(root) {
-    // The AI query has an exact neighbor just outside the selected cells.
+    // Preserve the original geometry; football is the illustrative viewer interest.
     const query = queryLocations[0];
     const { visited, compared, neighbors } = findNeighbors(query, false);
     const exact = findNeighbors(query, true).neighbors;
@@ -142,8 +142,8 @@
         candidateRing(point, amber)
       ).join("");
     const steps = [
-      ["Interest in AI", ["Diamond = search query", "Each dot = one video"],
-        "The diamond marks a viewer’s interest in AI. Each dot represents one video.", ""],
+      ["Football interest", ["Diamond = search query", "Each dot = one video"],
+        "The diamond marks a viewer’s interest in football. Each dot represents one video.", ""],
       ["2 closest centers", ["Measure to cell centers.", "Search the nearest two."],
         "Choose the two cells whose centers are nearest to the query.", centerLines],
       [`${compared.length} of ${points.length} points`, ["Measure from the query", "to dots in those cells."],
@@ -167,6 +167,9 @@
         label(searchSteps[index], 1107, 85, { cls: "small", color: muted }) +
         label(title, 1107, 149, { cls: "big", color: index === 4 ? amber : cyan }) +
         lines.map((text, row) => label(text, 1107, 208 + row * 38, { cls: "small", color: muted })).join("");
+      const tray = root.querySelector(".ann-candidate-tray");
+      tray.hidden = index < 3;
+      tray.innerHTML = window.DeckRecommendations.candidates.map((candidate) => window.DeckRecommendations.card(candidate)).join("");
       setPressed(root, "step-", `step-${index}`);
       announce(root, description);
     }
