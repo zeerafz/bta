@@ -470,14 +470,28 @@
     ["shield", "Update your device", red, "SYSTEM · APPS"]
   ], "Steps to reduce access and tracking");
 
+  function system(local) {
+    if (!local) return sequence([
+      ["phone", "Device", cyan], ["wifi", "Send signals", "#a8d1ff"], ["server", "Server", red], ["target", "Recommendation", "#c5afff"]
+    ], "The device sends signals and receives a recommendation computed on a server");
+    return canvas(1260, 445, frame(1260, 445) +
+      box(163, 56, 934, 338, "#132331", cyan, 22) +
+      label("Inside the device", 205, 102, { align: "start", color: cyan }) +
+      box(610, 70, 40, 5, "#587590", "none", 2) +
+      arrow("M420 230H550", cyan, true) + arrow("M710 230H840", cyan, true) +
+      badge("chart", 352, 230, "Local signals", cyan, 56) +
+      badge("cpu", 630, 230, "Local model", "#c5afff", 56) +
+      badge("target", 908, 230, "Recommendation", red, 56),
+    "The device computes the recommendation locally");
+  }
+
+  visual.cloud = () => system(false);
+  visual.local = () => system(true);
   visual.architecture = () => canvas(1260, 445, frame(1260, 445) +
-    lane(67, red, "SERVER RANKING", [["wifi", "Send signals"], ["server", "Server ranks"], ["phone", "Get ranked list"]]) +
-    label("Supports larger models. The service receives the signals used in this example.", 630, 165, { cls: "small", color: muted }) +
-    lane(237, cyan, "ON-DEVICE RANKING", [["chart", "Use local history"], ["cpu", "Phone ranks"], ["phone", "Show videos"]]) +
-    label("History can stay on the phone. Ranking uses the phone’s memory and power.", 630, 335, { cls: "small", color: muted }) +
-    box(38, 370, 1184, 53, "#142030", line, 9) +
-    label("Hybrid example: The server finds candidates. The phone orders them.", 630, 404, { cls: "node-title" }),
-  "Server ranking sends signals to a server, on-device ranking can use a local history, and hybrid ranking can combine server retrieval with local ordering");
+    lane(65, red, "Cloud Processing", [["phone","Device"],["server","Remote model"],["target","Recommendation"]]) +
+    lane(276, cyan, "On-Device Processing", [["chart","Local signals"],["cpu","Local model"],["target","Recommendation"]]) +
+    box(52, 277, 1156, 88, "none", `${cyan}b0`, 10),
+  "Cloud processing sends a request to a server. Local processing ranks on the device");
 
   visual.thanks = () => canvas(1448, 716, circle(724, 351, 329, "url(#halo)") +
     orbit(724, 351, 272, "#5a7795") + orbit(724, 351, 241, "#5a7795") +

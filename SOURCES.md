@@ -23,7 +23,7 @@
 - The 2018 Panoptispy study found leaks of images and video in a sample of Android apps. It recorded no audio leaks in its experiments, within the limits of the sample and method. An accurate ad by itself is insufficient evidence of recording. We found no convincing general evidence that major platforms routinely record private conversations to target ads. [Panoptispy](https://petsymposium.org/popets/2018/popets-2018-0030.php)
 - In its final 2026 complaint, the FTC said that CMG’s Active Listening service did not collect or use voice data for the service it investigated. [FTC Final Complaint](https://www.ftc.gov/system/files/ftc_gov/pdf/2423029c4838cmgfinalcomplaint.pdf)
 
-## Privacy choices · Slides 37–38
+## Privacy choices · Slides 37–40
 
 - Android and Apple document sensor permissions and microphone and camera indicators. The controls available to a viewer depend on the operating system version and settings. [Android privacy controls](https://developer.android.com/training/permissions/explaining-access) · [Apple hardware access controls](https://support.apple.com/en-ca/guide/iphone/iph168c4bbd5/27/ios/27)
 - LiteRT supports running inference on the device. The slides use local ranking as an architectural example. The privacy benefit depends on what actually leaves the device, including content requests or usage logs if present. [Google LiteRT](https://developers.google.com/edge/litert)

@@ -1,6 +1,6 @@
 # Behind the Algorithm
 
-A 43-slide English presentation about reverse engineering, recommendation systems, and digital privacy. It explores Android app analysis, video ranking, ad targeting, and on-device personalization. The deck closes with two five-question quizzes, a Q&A slide, and clickable references.
+A 45-slide English presentation about reverse engineering, recommendation systems, and digital privacy. It explores Android app analysis, video ranking, ad targeting, and on-device personalization. The deck closes with two five-question quizzes, a Q&A slide, and clickable references.
 
 [Open the presentation on GitHub Pages](https://zeerafz.github.io/bta/)
 
@@ -27,7 +27,7 @@ The toolbar also has buttons for mouse and touch navigation. When a button has f
 - **27 · Approximate nearest neighbor search.** Pick a topic and compare approximate and exact search. The starting AI query shows how scanning only part of the index can miss a nearby match. Both modes use the same 304 synthetic points.
 - **29 · Learning from interactions.** Finish or skip a video to see an interest score change. Reset restores the starting scores.
 - **31 · Ranking.** Switch priority between completion and sharing to see the same candidates reorder.
-- **40–41 · Quizzes.** Choose answers to see immediate feedback. On a phone in portrait, scroll through the questions.
+- **42–43 · Quizzes.** Choose answers to see immediate feedback. On a phone in portrait, scroll through the questions.
 
 ## GitHub Pages
 
