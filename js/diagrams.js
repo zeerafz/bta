@@ -473,7 +473,11 @@
   function system(local) {
     if (!local) return sequence([
       ["phone", "Device", cyan], ["wifi", "Send signals", "#a8d1ff"], ["server", "Server", red], ["target", "Recommendation", "#c5afff"]
-    ], "The device sends signals and receives a recommendation computed on a server");
+    ], "The app sends watch time to the server, which uses it to rank videos and sends recommendations back.",
+    { captions: [
+      "When you watch an AI video, the app can send your watch time to the server.",
+      "The server uses that signal to rank videos and sends recommendations back to your phone."
+    ] });
     return canvas(1260, 445, frame(1260, 445) +
       box(163, 56, 934, 338, "#132331", cyan, 22) +
       label("Inside the device", 205, 102, { align: "start", color: cyan }) +

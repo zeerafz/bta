@@ -6,29 +6,29 @@
   const letters = "ABCD";
 
   const analysis = [
-    ["What can static analysis establish about an API call?",
-      ["The app always sends it", "The code contains a possible request", "The server stores its data", "The request travels unencrypted"], 1],
-    ["What best confirms the test app sent a playback event?",
-      ["A video icon in the APK", "A permission in the manifest", "A captured request after playback", "A filename matching the event"], 2],
-    ["Why can approximate search miss a nearby video?",
-      ["It checks only part of the index", "It skips the query vector", "It ranks by likes before retrieval", "It requires topic labels"], 0],
-    ["What can reorder videos if their predicted probabilities stay fixed?",
-      ["Renaming the APK", "Widening the search grid", "Increasing the screen size", "Changing the scoring weights"], 3],
-    ["What can a feed use when a new viewer has no history?",
-      ["The viewer’s replay counts", "Popular or viewer-chosen topics", "The viewer’s past completion rates", "The viewer’s past skip patterns"], 1]
+    ["Which method examines app code without running the app?",
+      ["Dynamic analysis", "Static analysis", "Video ranking", "Ad targeting"], 1],
+    ["What can a network trace show?",
+      ["The app’s icon", "The language its code is written in", "A request sent by the app", "Which video the viewer enjoyed"], 2],
+    ["What does retrieval do in a video feed?",
+      ["Finds a shortlist of videos", "Puts the shortlist in order", "Plays the next video", "Records how long you watched"], 0],
+    ["What does ranking do with the shortlist?",
+      ["Collects videos from the whole library", "Records how long you watch", "Downloads the app", "Puts the videos in order"], 3],
+    ["Which feature did we calculate from the AI clip?",
+      ["The title of this talk", "The percentage of a video you watched", "The model’s final prediction", "The app’s permission screen"], 1]
   ];
 
   const privacy = [
-    ["What can a shared Wi-Fi connection tell an ad system?",
-      ["The users discussed a product", "The devices belong to one person", "The network is one possible linking signal", "It identifies the cause of a specific ad"], 2],
-    ["Which finding best supports a claim of audio-based ad targeting?",
-      ["The app has microphone permission", "The ad followed a conversation", "A replay appears in the log", "Captured audio is traced to ad selection"], 3],
-    ["A log shows 30 seconds of playback for a 15-second clip. What does it establish?",
-      ["Two clip lengths of playback", "Which object drew attention", "Why the viewer stayed", "That the viewer liked the clip"], 0],
-    ["Which input can local ranking keep on the device?",
-      ["The platform’s entire catalog", "The viewing history used for ranking", "The server’s request logs", "Every video’s upload record"], 1],
-    ["What completes a recommendation feedback loop?",
-      ["The app installs an update", "An exact search scans the index", "The viewer reacts to a recommended video", "The app compresses a video"], 2]
+    ["Which action could help explain why you saw an ad for rings?",
+      ["Turning down the volume", "Charging your phone", "Searching online for rings", "Changing the screen brightness"], 2],
+    ["Does seeing an ad after a conversation prove the app used your microphone?",
+      ["Yes, if the ad appeared quickly", "Yes, if you saw the ad twice", "Yes, if the app has mic permission", "No, the ad alone doesn’t prove it"], 3],
+    ["Where are videos ranked when an app uses server ranking?",
+      ["On the server", "On your phone", "In your Wi-Fi router", "In your phone’s settings"], 0],
+    ["What can stay on your phone with on-device ranking?",
+      ["The entire video library", "Your viewing history", "The server’s logs", "Other viewers’ data"], 1],
+    ["Where can you control an app’s access to your microphone?",
+      ["Display settings", "Volume controls", "App permissions", "Battery settings"], 2]
   ];
 
   const references = [
