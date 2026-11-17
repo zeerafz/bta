@@ -316,30 +316,6 @@ button:disabled { opacity: .27; cursor: default; }
 }
 @media (max-width: 350px) { .chapter-progress { visibility: hidden; } }
 @media (orientation: portrait) and (max-width: 650px) {
-  #presentation:fullscreen.is-review #viewport { bottom: calc(var(--toolbar-height) + env(safe-area-inset-bottom)); }
-  .is-review #stage { inset: 0; width: 100%; height: 100%; transform: none; touch-action: pan-y pinch-zoom; }
-  .is-review .slide { overflow-y: auto; overscroll-behavior: contain; overflow-anchor: none; scroll-padding-top: 56px; }
-  .is-review .slide::after { display: none; }
-  .is-review .masthead { inset: 0 0 auto; padding: 12px 16px; background: var(--base); }
-  .is-review .masthead .wordmark, .is-review .chapter { font-size: 11px; }
-  .is-review .masthead .wordmark svg { width: 19px; height: 19px; }
-  .is-review .copy { position: relative; inset: auto; margin: 65px 16px 0; }
-  .is-review .copy h2 { font-size: 28px; }
-  .is-review .copy p { font-size: 15px; }
-  .is-review .visual { position: relative; inset: auto; margin: 16px 16px 25px; }
-  .quiz-sheet { height: auto; grid-template-rows: auto auto; }
-  .quiz-list { grid-template-rows: none; }
-  .quiz-question { padding: 10px; }
-  .quiz-question h3 { font-size: 17px; }
-  .quiz-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .quiz-options button { font-size: 14px; gap: 5px; }
-  .quiz-footer { flex-wrap: wrap; gap: 8px; font-size: 14px; }
-  .quiz-score { font-size: 14px; }
-  .quiz-reset { min-height: 44px; }
-  .reference-grid { grid-template-columns: 1fr; gap: 12px; }
-  .reference-group { padding: 16px; }
-  .reference-group h3 { font-size: 22px; }
-  .reference-group a { font-size: 17px; }
   .has-demo #viewport, #presentation:fullscreen.has-demo #viewport {
     bottom: calc(var(--toolbar-height) + 148px + env(safe-area-inset-bottom));
   }
@@ -422,7 +398,6 @@ button:disabled { opacity: .27; cursor: default; }
 .ann-candidate-tray .football-thumb { width: 40px; height: 30px; }
 .ann-candidate-tray .candidate-title { font-size: 18px; }
 .ann-candidate-tray .candidate-id { font-size: 17px; }
-.ann-mobile-summary { display: none; }
 .demo-chart { min-height: 0; display: flex; flex-direction: column; }
 .demo-chart > svg { min-height: 0; flex: 1; }
 .rank-content { position: relative; border: 1px solid #34475f; border-radius: 14px; background: #101924; overflow: hidden; }
@@ -476,95 +451,6 @@ button:disabled { opacity: .27; cursor: default; }
 .scored-row.top-ranked .candidate-score, .scored-row.top-ranked .rank-place { color: var(--cyan); }
 .scored-row.top-ranked .winner-label { display: block; position: absolute; top: -17px; right: 12px; font-size: 15px; background: #173c42; color: var(--cyan); padding: 0 8px; border-radius: 4px; }
 
-@media (orientation: portrait) and (max-width: 650px) {
-  /* The new explanations reflow so their text remains readable on a phone. */
-  .is-explainer #viewport, #presentation.is-explainer:fullscreen #viewport { bottom: calc(var(--toolbar-height) + env(safe-area-inset-bottom)); }
-  .is-explainer #stage { inset: 0; width: 100%; height: 100%; transform: none; touch-action: pan-y pinch-zoom; }
-  .is-explainer .slide { overflow-y: auto; overscroll-behavior: contain; overflow-anchor: none; scroll-padding-top: 58px; }
-  .is-explainer .slide::after { display: none; }
-  .is-explainer .masthead { inset: 0 0 auto; padding: 13px 16px; background: var(--base); }
-  .is-explainer .wordmark { font-size: 9px; gap: 7px; }
-  .is-explainer .wordmark svg { width: 17px; height: 17px; }
-  .is-explainer .chapter { font-size: 10px; max-width: 112px; text-align: right; }
-  .is-explainer .copy { position: relative; inset: auto; margin: 70px 18px 0; }
-  .is-explainer .copy h2, .is-explainer .wide[data-scene="feedPipeline"] .copy h2 { font-size: 29px; line-height: 1.15; }
-  .is-explainer .copy p { font-size: 15px; margin-top: 12px; }
-  .is-explainer .visual, .is-explainer .wide[data-scene="feedPipeline"] .visual { position: relative; inset: auto; display: block; margin: 23px 16px 25px; }
-  .is-explainer .demo { display: flex; flex-direction: column; height: auto; gap: 18px; }
-  .is-explainer .demo-controls { visibility: visible; gap: 8px; flex-wrap: wrap; }
-  .is-explainer .demo-button { font-size: 15px; min-height: 44px; padding: 10px 13px; }
-  .is-explainer .mobile-demos { display: none; }
-  .pipeline-stages { display: flex; flex-direction: column; gap: 9px; }
-  .pipeline-stage { padding: 20px; }
-  .pipeline-stage h3 { font-size: 24px; }
-  .step-label { font-size: 12px; }
-  .stage-retrieve, .stage-rank, .pipeline-link { display: none; }
-  .pipeline-demo[data-step="1"] .stage-retrieve, .pipeline-demo[data-step="2"] .stage-retrieve,
-  .pipeline-demo[data-step="2"] .stage-rank { display: block; }
-  .pipeline-demo[data-step="1"] .link-one, .pipeline-demo[data-step="2"] .link-one, .pipeline-demo[data-step="2"] .link-two { display: block; transform: rotate(90deg); line-height: 1; }
-  .pipeline-stage p { font-size: 19px; }
-  .pipeline-stage .optional-head { font-size: 14px; }
-  .pipeline-order > div { font-size: 19px; }
-  .knn-layout { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 18px; }
-  .knn-plot { width: 100%; }
-  .knn-explanation { width: 100%; }
-  .knn-explanation h3 { font-size: 25px; margin: 8px 0; }
-  .knn-count strong { font-size: 37px; }
-  .knn-count > span { font-size: 17px; }
-  .knn-message { min-height: 48px; font-size: 17px; margin-bottom: 10px; }
-  .k-definition { font-size: 16px; padding: 10px; gap: 16px; }
-  .k-definition b { font-size: 22px; }
-  .plot-key { font-size: 14px; }
-  .scale-question { font-size: 19px; line-height: 1.4; }
-  .rank-intake { display: flex; flex-direction: column; padding: 20px; gap: 12px; }
-  .intake-cards { width: 100%; gap: 7px; }
-  .intake-cards .football-card { max-width: none; }
-  .football-card { padding: 9px; gap: 9px; }
-  .football-thumb { width: 49px; height: 34px; }
-  .candidate-id { font-size: 16px; }
-  .candidate-title { font-size: 17px; }
-  .intake-arrow { font-size: 36px; transform: rotate(90deg); line-height: 1; }
-  .intake-model { font-size: 34px; padding: 20px 12px; width: 100%; }
-  .intake-model small { font-size: 15px; }
-  .rank-intake > p { font-size: 16px; }
-  .rank-detail { padding: 18px 12px; }
-  .candidate-focus { flex-direction: column; gap: 7px; margin-bottom: 18px; }
-  .candidate-focus > span { font-size: 14px; }
-  .network-detail { display: flex; flex-direction: column; gap: 10px; }
-  .network-inputs { width: 100%; gap: 8px; }
-  .network-inputs > div { font-size: 15px; }
-  .network-inputs b { font-size: 17px; }
-  .network-inputs > small { font-size: 13px; }
-  .network-visual { width: 100%; }
-  .network-visual svg { height: auto; }
-  .network-visual > p { font-size: 15px; }
-  .score-caption { font-size: 16px; margin-top: 12px; }
-  .rank-results { display: flex; flex-direction: column; padding: 20px 10px; gap: 16px; }
-  .results-heading { width: 100%; padding: 0 7px; }
-  .results-heading h3 { font-size: 27px; margin: 10px 0; }
-  .results-heading p { font-size: 16px; margin: 0; }
-  .scored-cards { width: 100%; height: 320px; }
-  .scored-row { height: 56px; gap: 7px; transform: translateY(calc(var(--position) * 63px)); }
-  .scored-row .football-card { padding: 7px; gap: 7px; }
-  .scored-row .football-thumb { display: none; }
-  .candidate-score { font-size: 22px; }
-  .rank-place { font-size: 15px; width: 13px; }
-  .scored-row.top-ranked .winner-label { font-size: 11px; top: -11px; }
-}
 /* Keep thumbnail SVGs independent of the full-size diagram rule. */
 .demo .football-thumb { width: 63px; height: 43px; }
 .demo .ann-candidate-tray .football-thumb { width: 40px; height: 30px; }
-@media (orientation: portrait) and (max-width: 650px) {
-  .is-explainer .demo .football-thumb { width: 49px; height: 34px; }
-}
-@media (orientation: portrait) and (max-width: 650px) {
-  .is-explainer .slide { display: flex; flex-direction: column; }
-  .is-explainer .copy { order: 0; flex-shrink: 0; }
-  .is-explainer .visual { order: 1; flex-shrink: 0; }
-  [data-scene="approximation"] .demo-chart > svg { flex: none; height: auto; }
-  .ann-mobile-summary { display: block; margin: 8px 0 0; color: var(--paper); font-size: 16px; line-height: 1.45; }
-  .ann-candidate-tray { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 12px; }
-  .ann-candidate-tray .candidate-title { font-size: 14px; }
-  .is-explainer .demo .ann-candidate-tray .football-thumb { width: 28px; height: 23px; }
-  [data-scene="approximation"] .demo-controls > div { flex-wrap: wrap; justify-content: center; }
-}

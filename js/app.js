@@ -26,6 +26,7 @@
   let toolbarTimer;
   let swipe;
   let helpTimer;
+  let demoObserver;
 
   function number(index) {
     return String(index + 1).padStart(2, "0");
@@ -66,33 +67,36 @@
   }
 
   function mirrorControls() {
+    demoObserver?.disconnect();
+    demoObserver = null;
     const mirror = byId("mobile-demos");
     const originals = [...slideRoot.querySelectorAll(".demo-button")];
     presentation.classList.toggle("has-demo", originals.length > 0);
     mirror.hidden = originals.length === 0;
     mirror.replaceChildren();
     if (!originals.length) return;
-    const sync = () => {
-      mirror.querySelectorAll("button").forEach((button, index) => {
-        button.disabled = originals[index].disabled;
-        if (originals[index].hasAttribute("aria-pressed")) {
-          button.setAttribute("aria-pressed", originals[index].getAttribute("aria-pressed"));
+    const copies = new Map();
+    demoObserver = new MutationObserver(() => {
+      for (const [original, copy] of copies) {
+        copy.textContent = original.textContent;
+        copy.disabled = original.disabled;
+        if (original.hasAttribute("aria-pressed")) {
+          copy.setAttribute("aria-pressed", original.getAttribute("aria-pressed"));
         }
-      });
-    };
+      }
+    });
     originals.forEach((button) => {
       const copy = button.cloneNode(true);
       copy.addEventListener("click", () => button.click());
-      button.addEventListener("click", () => queueMicrotask(sync));
       mirror.append(copy);
+      copies.set(button, copy);
+      demoObserver.observe(button, { attributes: true, attributeFilter: ["disabled", "aria-pressed"], childList: true });
     });
   }
 
   function draw(slide) {
     const imageFile = photoFiles[slide.visual];
     const isHero = slide.layout === "hero";
-    presentation.classList.toggle("is-explainer", ["feedPipeline", "exactKnn", "approximation", "mlpRanking"].includes(slide.visual));
-    presentation.classList.toggle("is-review", slide.layout === "quiz" || slide.layout === "references");
     const titleTag = isHero ? "h1" : "h2";
     const art = imageFile
       ? `<div class="art" aria-hidden="true"><img src="assets/images/${imageFile}.webp" alt=""></div>`

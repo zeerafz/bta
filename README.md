@@ -30,7 +30,9 @@ The toolbar also has buttons for mouse and touch navigation. When a button has f
 - **30 · Approximate nearest neighbor search.** Pick a topic and compare approximate and exact search. The starting AI query shows how scanning only part of the index can miss a nearby match. Both modes use the same 304 synthetic points.
 - **32 · Learning from interactions.** Finish or skip a video to see an interest score change. Reset restores the starting scores.
 - **34 · Ranking.** Switch priority between completion and sharing to see the same candidates reorder.
-- **45–46 · Quizzes.** Choose answers to see immediate feedback. On a phone in portrait, scroll through the questions.
+- **45–46 · Quizzes.** Choose answers to see immediate feedback.
+
+All slides keep their 16:9 landscape layout. On a phone held upright, demo controls appear below the slide; turning the phone sideways gives the slides more room.
 
 ## GitHub Pages
 

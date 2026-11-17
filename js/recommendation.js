@@ -17,11 +17,6 @@
   const button = (action, title) => `<button class="demo-button" type="button" data-action="${action}">${title}</button>`;
   const status = '<span class="sr-only demo-status" aria-live="polite" aria-atomic="true"></span>';
   function announce(root, text) { root.querySelector(".demo-status").textContent = text; }
-  function revealOnPhone(element) {
-    if (window.matchMedia("(orientation: portrait) and (max-width: 650px)").matches) {
-      element.scrollIntoView({ block: "start" });
-    }
-  }
 
   visual.feedPipeline = () => `<div class="demo pipeline-demo" data-step="0">
     <div class="pipeline-stages">
@@ -65,14 +60,8 @@
       next.disabled = step === 2;
       announce(root, ["Stage 1. A multimodal Transformer turns frames, speech, and captions into a video vector. An optional head assigns a Football tag.", "Stage 2. ANN uses the viewer’s interest vector to retrieve five candidates. Five is illustrative.", "Stage 3. An MLP scores each video for this viewer and orders the candidates."][step]);
     }
-    next.addEventListener("click", () => {
-      show(Math.min(step + 1, 2));
-      revealOnPhone(root.querySelectorAll(".pipeline-stage")[step]);
-    });
-    root.querySelector('[data-action="pipeline-reset"]').addEventListener("click", () => {
-      show(0);
-      revealOnPhone(root.querySelector(".stage-understand"));
-    });
+    next.addEventListener("click", () => show(Math.min(step + 1, 2)));
+    root.querySelector('[data-action="pipeline-reset"]').addEventListener("click", () => show(0));
     show(0);
   }
 
@@ -227,12 +216,8 @@
         });
       }
       show(Math.min(step + 1, 4));
-      revealOnPhone(step < 2 ? intake : step === 2 ? detail : results);
     });
-    root.querySelector('[data-action="mlp-reset"]').addEventListener("click", () => {
-      show(0);
-      revealOnPhone(intake);
-    });
+    root.querySelector('[data-action="mlp-reset"]').addEventListener("click", () => show(0));
     show(0);
   }
   Object.assign(window.DeckDemos, { feedPipeline: initPipeline, exactKnn: initExactKnn, mlpRanking: initMlpRanking });

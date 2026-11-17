@@ -103,7 +103,7 @@
       `<g class="walk-field">${field()}</g><g class="walk-marks"></g>` +
       '<g class="walk-query"></g>',
     '<g class="walk-explanation"></g>', "Step-by-step grid search on a map of video embeddings");
-    return interactive(chart + '<p class="ann-mobile-summary"></p><div class="ann-candidate-tray" hidden></div>',
+    return interactive(chart + '<div class="ann-candidate-tray" hidden></div>',
       `<div role="group" aria-label="Search steps">${searchSteps.map((step, index) =>
         button(`step-${index}`, `${index + 1}. ${step}`, index === 0)
       ).join("")}</div>`);
@@ -121,7 +121,6 @@
     const fieldLayer = root.querySelector(".walk-field");
     const marks = root.querySelector(".walk-marks");
     const explanation = root.querySelector(".walk-explanation");
-    const mobileSummary = root.querySelector(".ann-mobile-summary");
     const tray = root.querySelector(".ann-candidate-tray");
     const { candidates, card } = window.DeckRecommendations;
     tray.innerHTML = candidates.map((candidate) => card(candidate)).join("");
@@ -178,7 +177,6 @@
         label(searchSteps[index], 1107, 85, { cls: "small", color: muted }) +
         label(title, 1107, 149, { cls: "big", color: index === 4 ? amber : cyan }) +
         lines.map((text, row) => label(text, 1107, 208 + row * 38, { cls: "small", color: muted })).join("");
-      mobileSummary.textContent = title + " · " + lines.join(" ");
       tray.hidden = index < 3;
       setPressed(root, "step-", `step-${index}`);
       announce(root, description);
