@@ -103,15 +103,15 @@
       `<g class="walk-field">${field()}</g><g class="walk-marks"></g>` +
       '<g class="walk-query"></g>',
     '<g class="walk-explanation"></g>', "Step-by-step grid search on a map of video embeddings");
-    return interactive(chart + '<div class="ann-candidate-tray" hidden></div>',
+    return interactive(chart + '<p class="ann-mobile-summary"></p><div class="ann-candidate-tray" hidden></div>',
       `<div role="group" aria-label="Search steps">${searchSteps.map((step, index) =>
         button(`step-${index}`, `${index + 1}. ${step}`, index === 0)
       ).join("")}</div>`);
   }
 
   function initSearchWalkthrough(root) {
-    // Preserve the original geometry; football is the illustrative viewer interest.
-    const query = queryLocations[0];
+    // Keep the original grid and use a query at the edge of its sports cluster.
+    const query = { x: 754, y: 217 };
     const { visited, compared, neighbors } = findNeighbors(query, false);
     const exact = findNeighbors(query, true).neighbors;
     const missed = exact.filter((point) => !neighbors.includes(point));
@@ -121,6 +121,10 @@
     const fieldLayer = root.querySelector(".walk-field");
     const marks = root.querySelector(".walk-marks");
     const explanation = root.querySelector(".walk-explanation");
+    const mobileSummary = root.querySelector(".ann-mobile-summary");
+    const tray = root.querySelector(".ann-candidate-tray");
+    const { candidates, card } = window.DeckRecommendations;
+    tray.innerHTML = candidates.map((candidate) => card(candidate)).join("");
     const amber = swatches[1];
     const centerLines = visited.map(({ x, y }, index) =>
       path(`M${query.x} ${query.y}L${x} ${y}`, cyan, 1.8, 'stroke-dasharray="5 6"') +
@@ -133,14 +137,21 @@
     ).join("");
     const candidateRing = ({ x, y }, color = ink, style = "") =>
       circle(x, y, 9, "none", color, `stroke-width="2.5" ${style}`);
-    const returned = neighbors.map((point) => candidateRing(point)).join("");
+    const positions = [[753, 163], [828, 209], [687, 176], [828, 257], [684, 261]];
+    const candidateLabels = neighbors.map((point, index) => {
+      const [x, y] = positions[index];
+      return path(`M${point.x} ${point.y}L${x} ${y}`, "#aab5c4", 1.3) +
+        circle(x, y, 12, "#152434", ink) +
+        label(candidates[index].id, x, y + 5, { cls: "tiny", color: ink });
+    }).join("");
+    const returned = candidateLabels + neighbors.map((point) => candidateRing(point)).join("");
     const exactCheck = shared.map((point) => candidateRing(point)).join("") +
       extra.map((point) => candidateRing(point, muted, 'stroke-dasharray="3 3"')).join("") +
       missed.map((point) =>
-        path(`M${point.x + 7} ${point.y + 7}l34 39h28`, amber, 1.8) +
-        label("Missed neighbor", point.x + 75, point.y + 51, { cls: "small", color: amber, align: "start" }) +
+        path(`M${point.x} ${point.y + 9}l18 30h22`, amber, 1.8) +
+        label("Missed neighbor", point.x + 45, point.y + 46, { cls: "small", color: amber, align: "start" }) +
         candidateRing(point, amber)
-      ).join("");
+      ).join("") + candidateLabels;
     const steps = [
       ["Football interest", ["Diamond = search query", "Each dot = one video"],
         "The diamond marks a viewer’s interest in football. Each dot represents one video.", ""],
@@ -149,7 +160,7 @@
       [`${compared.length} of ${points.length} points`, ["Measure from the query", "to dots in those cells."],
         `Compare distances to the ${compared.length} points inside the two selected cells.`, distanceLines],
       ["5 candidates", ["Return the nearest five", "among the points checked."],
-        "The five white rings show the candidates returned by the approximate search.", returned],
+        "The five white rings labeled A through E show the football videos returned by approximate search.", returned],
       [`${shared.length} of 5 match`, [`Exact checks all ${points.length} dots.`, "Amber = missed neighbor", "Dashed = approximate only"],
         `Exact search compares all ${points.length} points. ${shared.length} results match. The amber ring marks a missed neighbor outside the selected cells. The dashed ring marks the approximate-only candidate.`, exactCheck]
     ];
@@ -167,9 +178,8 @@
         label(searchSteps[index], 1107, 85, { cls: "small", color: muted }) +
         label(title, 1107, 149, { cls: "big", color: index === 4 ? amber : cyan }) +
         lines.map((text, row) => label(text, 1107, 208 + row * 38, { cls: "small", color: muted })).join("");
-      const tray = root.querySelector(".ann-candidate-tray");
+      mobileSummary.textContent = title + " · " + lines.join(" ");
       tray.hidden = index < 3;
-      tray.innerHTML = window.DeckRecommendations.candidates.map((candidate) => window.DeckRecommendations.card(candidate)).join("");
       setPressed(root, "step-", `step-${index}`);
       announce(root, description);
     }

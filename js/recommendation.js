@@ -17,6 +17,11 @@
   const button = (action, title) => `<button class="demo-button" type="button" data-action="${action}">${title}</button>`;
   const status = '<span class="sr-only demo-status" aria-live="polite" aria-atomic="true"></span>';
   function announce(root, text) { root.querySelector(".demo-status").textContent = text; }
+  function revealOnPhone(element) {
+    if (window.matchMedia("(orientation: portrait) and (max-width: 650px)").matches) {
+      element.scrollIntoView({ block: "start" });
+    }
+  }
 
   visual.feedPipeline = () => `<div class="demo pipeline-demo" data-step="0">
     <div class="pipeline-stages">
@@ -60,8 +65,14 @@
       next.disabled = step === 2;
       announce(root, ["Stage 1. A multimodal Transformer turns frames, speech, and captions into a video vector. An optional head assigns a Football tag.", "Stage 2. ANN uses the viewer’s interest vector to retrieve five candidates. Five is illustrative.", "Stage 3. An MLP scores each video for this viewer and orders the candidates."][step]);
     }
-    next.addEventListener("click", () => show(Math.min(step + 1, 2)));
-    root.querySelector('[data-action="pipeline-reset"]').addEventListener("click", () => show(0));
+    next.addEventListener("click", () => {
+      show(Math.min(step + 1, 2));
+      revealOnPhone(root.querySelectorAll(".pipeline-stage")[step]);
+    });
+    root.querySelector('[data-action="pipeline-reset"]').addEventListener("click", () => {
+      show(0);
+      revealOnPhone(root.querySelector(".stage-understand"));
+    });
     show(0);
   }
 
@@ -185,6 +196,7 @@
     let step = 0;
     const next = root.querySelector('[data-action="mlp-next"]');
     const intake = root.querySelector(".rank-intake");
+    const model = intake.querySelector(".intake-model");
     const detail = root.querySelector(".rank-detail");
     const results = root.querySelector(".rank-results");
     function show(value) {
@@ -204,8 +216,23 @@
       });
       announce(root, ["Five football candidates A through E from ANN enter the ranking stage.", "The five cards move into the MLP. It scores each viewer–video pair.", "Zoom into A, Goal replay. Watch history, video length, and similarity are numeric inputs to fully connected hidden layers. The illustrative output score is 0.87.", "All five illustrative scores: A 0.87, B 0.94, C 0.72, D 0.81, E 0.63.", "Sorted highest to lowest: B, A, D, C, E. Free-kick tips with score 0.94 goes first."][step]);
     }
-    next.addEventListener("click", () => show(Math.min(step+1,4)));
-    root.querySelector('[data-action="mlp-reset"]').addEventListener("click", () => show(0));
+    next.addEventListener("click", () => {
+      if (step === 0) {
+        const target = model.getBoundingClientRect();
+        const scale = target.width / model.offsetWidth;
+        intake.querySelectorAll(".football-card").forEach((element) => {
+          const card = element.getBoundingClientRect();
+          element.style.setProperty("--mlp-dx", `${(target.left + target.width / 2 - card.left - card.width / 2) / scale}px`);
+          element.style.setProperty("--mlp-dy", `${(target.top + target.height / 2 - card.top - card.height / 2) / scale}px`);
+        });
+      }
+      show(Math.min(step + 1, 4));
+      revealOnPhone(step < 2 ? intake : step === 2 ? detail : results);
+    });
+    root.querySelector('[data-action="mlp-reset"]').addEventListener("click", () => {
+      show(0);
+      revealOnPhone(intake);
+    });
     show(0);
   }
   Object.assign(window.DeckDemos, { feedPipeline: initPipeline, exactKnn: initExactKnn, mlpRanking: initMlpRanking });

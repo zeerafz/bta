@@ -422,6 +422,7 @@ button:disabled { opacity: .27; cursor: default; }
 .ann-candidate-tray .football-thumb { width: 40px; height: 30px; }
 .ann-candidate-tray .candidate-title { font-size: 18px; }
 .ann-candidate-tray .candidate-id { font-size: 17px; }
+.ann-mobile-summary { display: none; }
 .demo-chart { min-height: 0; display: flex; flex-direction: column; }
 .demo-chart > svg { min-height: 0; flex: 1; }
 .rank-content { position: relative; border: 1px solid #34475f; border-radius: 14px; background: #101924; overflow: hidden; }
@@ -437,7 +438,7 @@ button:disabled { opacity: .27; cursor: default; }
 .intake-cards .football-card:nth-child(3) { --entry: 2; }
 .intake-cards .football-card:nth-child(4) { --entry: 3; }
 .intake-cards .football-card:nth-child(5) { --entry: 4; }
-@keyframes enter-mlp { to { transform: translateX(650px) scale(.3); opacity: 0; } }
+@keyframes enter-mlp { to { transform: translate(var(--mlp-dx), var(--mlp-dy)) scale(.3); opacity: 0; } }
 .mlp-demo[data-phase="entering"] .intake-model { animation: model-processing 1.5s .25s both; }
 @keyframes model-processing { 50% { box-shadow: 0 0 65px #ff536855; border-color: var(--red); } }
 .rank-detail { padding: 22px 35px 12px; animation: focus-candidate .6s ease-out; }
@@ -489,7 +490,7 @@ button:disabled { opacity: .27; cursor: default; }
   .is-explainer .copy h2, .is-explainer .wide[data-scene="feedPipeline"] .copy h2 { font-size: 29px; line-height: 1.15; }
   .is-explainer .copy p { font-size: 15px; margin-top: 12px; }
   .is-explainer .visual, .is-explainer .wide[data-scene="feedPipeline"] .visual { position: relative; inset: auto; display: block; margin: 23px 16px 25px; }
-  .is-explainer .demo { display: flex; flex-direction: column; gap: 18px; }
+  .is-explainer .demo { display: flex; flex-direction: column; height: auto; gap: 18px; }
   .is-explainer .demo-controls { visibility: visible; gap: 8px; flex-wrap: wrap; }
   .is-explainer .demo-button { font-size: 15px; min-height: 44px; padding: 10px 13px; }
   .is-explainer .mobile-demos { display: none; }
@@ -526,7 +527,6 @@ button:disabled { opacity: .27; cursor: default; }
   .intake-model { font-size: 34px; padding: 20px 12px; width: 100%; }
   .intake-model small { font-size: 15px; }
   .rank-intake > p { font-size: 16px; }
-  @keyframes enter-mlp { to { transform: translateY(320px) scale(.3); opacity: 0; } }
   .rank-detail { padding: 18px 12px; }
   .candidate-focus { flex-direction: column; gap: 7px; margin-bottom: 18px; }
   .candidate-focus > span { font-size: 14px; }
@@ -561,4 +561,10 @@ button:disabled { opacity: .27; cursor: default; }
   .is-explainer .slide { display: flex; flex-direction: column; }
   .is-explainer .copy { order: 0; flex-shrink: 0; }
   .is-explainer .visual { order: 1; flex-shrink: 0; }
+  [data-scene="approximation"] .demo-chart > svg { flex: none; height: auto; }
+  .ann-mobile-summary { display: block; margin: 8px 0 0; color: var(--paper); font-size: 16px; line-height: 1.45; }
+  .ann-candidate-tray { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 12px; }
+  .ann-candidate-tray .candidate-title { font-size: 14px; }
+  .is-explainer .demo .ann-candidate-tray .football-thumb { width: 28px; height: 23px; }
+  [data-scene="approximation"] .demo-controls > div { flex-wrap: wrap; justify-content: center; }
 }
