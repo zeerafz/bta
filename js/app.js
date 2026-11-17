@@ -74,6 +74,7 @@
     if (!originals.length) return;
     const sync = () => {
       mirror.querySelectorAll("button").forEach((button, index) => {
+        button.disabled = originals[index].disabled;
         if (originals[index].hasAttribute("aria-pressed")) {
           button.setAttribute("aria-pressed", originals[index].getAttribute("aria-pressed"));
         }
@@ -90,6 +91,7 @@
   function draw(slide) {
     const imageFile = photoFiles[slide.visual];
     const isHero = slide.layout === "hero";
+    presentation.classList.toggle("is-explainer", ["feedPipeline", "exactKnn", "mlpRanking"].includes(slide.visual));
     presentation.classList.toggle("is-review", slide.layout === "quiz" || slide.layout === "references");
     const titleTag = isHero ? "h1" : "h2";
     const art = imageFile
